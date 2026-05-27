@@ -243,7 +243,19 @@ export default function Home() {
                 <div className="rounded-2xl border border-white/8 bg-black/20 p-5">
                   <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-dim">current command</div>
                   <div className="mt-2 text-sm text-white">[ SEAL CAPSULE ] x {mintCount}</div>
-                  {hash ? <div className="mt-3 break-all font-mono text-[11px] text-text-soft">tx: {hash}</div> : null}
+                  {hash ? (
+                    <div className="mt-3 flex flex-col gap-2 font-mono text-[11px] text-text-soft sm:flex-row sm:items-center sm:gap-3">
+                      <span className="break-all">tx: {hash}</span>
+                      <a
+                        href={`https://basescan.org/tx/${hash}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-echo underline-offset-4 hover:underline"
+                      >
+                        View on BaseScan
+                      </a>
+                    </div>
+                  ) : null}
                   {writeError ? <div className="mt-3 text-sm text-danger">{writeError.message}</div> : null}
                   {mintConfirmed ? <div className="mt-3 text-sm text-terminal">Mint confirmed on Base.</div> : null}
                 </div>
