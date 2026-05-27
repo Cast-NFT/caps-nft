@@ -11,7 +11,9 @@
     "start": "next start",
     "lint": "next lint",
     "contract:compile": "hardhat compile",
-    "contract:deploy:base": "hardhat run scripts/deploy-echo-capsul.js --network base"
+    "contract:deploy:base": "hardhat run scripts/deploy-echo-capsul.js --network base",
+    "contract:mint:on": "hardhat run scripts/set-mint-active.js --network base",
+    "contract:mint:off": "hardhat run scripts/set-mint-active.js --network base --off"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.9.6",
