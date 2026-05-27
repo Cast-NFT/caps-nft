@@ -66,16 +66,16 @@ function ForgeNode({
 }) {
   return (
     <div className={`flex items-center gap-3 ${align === "right" ? "sm:flex-row-reverse" : ""}`}>
-      <div className={`relative overflow-hidden rounded-2xl border border-white/8 bg-gradient-to-b from-white/5 to-transparent p-2 ${align === "right" ? "order-2 sm:order-none" : ""}`}>
+      <div className={`relative shrink-0 overflow-visible rounded-2xl border border-white/8 bg-gradient-to-b from-white/5 to-transparent p-2 ${align === "right" ? "order-2 sm:order-none" : ""}`}>
         <div className={`absolute inset-0 bg-gradient-to-b ${visual.glow}`} />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(124,108,255,0.14),transparent_56%)]" />
-        <div className="relative flex h-20 w-20 items-center justify-center">
+        <div className="relative flex h-20 w-20 items-center justify-center sm:h-24 sm:w-24">
           <Image
             src={visual.image}
             alt={visual.label}
-            width={72}
-            height={72}
-            className="h-16 w-16 object-contain"
+            width={96}
+            height={96}
+            className="h-16 w-16 max-w-none object-contain sm:h-20 sm:w-20"
             unoptimized
             loading="lazy"
           />
