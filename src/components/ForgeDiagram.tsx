@@ -65,28 +65,36 @@ function ForgeNode({
   align: "left" | "right";
 }) {
   return (
-    <div className={`flex items-center gap-3 ${align === "right" ? "sm:flex-row-reverse" : ""}`}>
-      <div className={`relative shrink-0 overflow-visible rounded-2xl border border-white/8 bg-gradient-to-b from-white/5 to-transparent p-2 ${align === "right" ? "order-2 sm:order-none" : ""}`}>
+    <div
+      className={`grid min-w-0 grid-cols-[72px_minmax(0,1fr)] items-center gap-3 sm:w-[230px] sm:grid-cols-[76px_minmax(0,1fr)] ${
+        align === "right" ? "sm:text-right" : ""
+      }`}
+    >
+      <div
+        className={`relative shrink-0 overflow-visible rounded-2xl border border-white/8 bg-gradient-to-b from-white/5 to-transparent p-2 ${
+          align === "right" ? "sm:order-2" : ""
+        }`}
+      >
         <div className={`absolute inset-0 bg-gradient-to-b ${visual.glow}`} />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(124,108,255,0.14),transparent_56%)]" />
-        <div className="relative flex h-20 w-20 items-center justify-center sm:h-24 sm:w-24">
+        <div className="relative flex h-14 w-14 items-center justify-center sm:h-16 sm:w-16">
           <Image
             src={visual.image}
             alt={visual.label}
-            width={96}
-            height={96}
-            className="h-16 w-16 max-w-none object-contain sm:h-20 sm:w-20"
+            width={80}
+            height={80}
+            className="h-12 w-12 max-w-none object-contain sm:h-14 sm:w-14"
             unoptimized
             loading="lazy"
           />
         </div>
       </div>
 
-      <div>
-        <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-text-dim">
+      <div className={`min-w-0 ${align === "right" ? "sm:order-1" : ""}`}>
+        <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-text-dim">
           {visual.label}
         </div>
-        <div className="mt-1 max-w-[170px] text-sm font-semibold leading-5 text-white sm:max-w-[220px] sm:text-base">
+        <div className="mt-1 text-[12px] font-semibold leading-4 text-white sm:text-[13px]">
           {title}
         </div>
       </div>
