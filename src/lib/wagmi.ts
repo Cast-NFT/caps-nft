@@ -1,9 +1,9 @@
 import { getDefaultConfig } from "@rainbow-me/rainbowkit";
-import { base, baseSepolia } from "wagmi/chains";
+import { base } from "wagmi/chains";
 
 export const config = getDefaultConfig({
-  appName: "EchoCapsules",
-  projectId: "echocapsules-mint",
-  chains: [base, baseSepolia],
+  appName: "EchoCapsul",
+  projectId: "echocapsul-mint",
+  chains: [base],
   ssr: true,
 });

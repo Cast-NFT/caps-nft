@@ -1,0 +1,20 @@
+{
+  "name": "EchoCapsul — Sealed Mystery Box",
+  "description": "A sealed EchoCapsul waiting for reveal. Rarity, shell, traits, and forge potential remain hidden until reveal.",
+  "image": "https://echo-capsul.vercel.app/capsules/capsule_prereveal_22f0c7c5.gif",
+  "external_url": "https://echo-capsul.vercel.app",
+  "attributes": [
+    {
+      "trait_type": "State",
+      "value": "Sealed"
+    },
+    {
+      "trait_type": "Collection",
+      "value": "EchoCapsul"
+    },
+    {
+      "trait_type": "Phase",
+      "value": "Mint"
+    }
+  ]
+}
