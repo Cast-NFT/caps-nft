@@ -86,7 +86,9 @@ function ForgeNode({
         <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-text-dim">
           {visual.label}
         </div>
-        <div className="mt-1 text-sm font-semibold text-white sm:text-base">{title}</div>
+        <div className="mt-1 max-w-[170px] text-sm font-semibold leading-5 text-white sm:max-w-[220px] sm:text-base">
+          {title}
+        </div>
       </div>
     </div>
   );
