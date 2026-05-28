@@ -29,8 +29,6 @@ module.exports = {
     },
   },
   etherscan: {
-    apiKey: {
-      base: BASESCAN_API_KEY,
-    },
+    apiKey: BASESCAN_API_KEY,
   },
 };

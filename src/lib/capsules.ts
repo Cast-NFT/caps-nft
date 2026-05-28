@@ -70,12 +70,12 @@ export const forgePaths = [
 export const roadmap = [
   {
     title: "Chapter I — Sealed Mint",
-    status: "ACTIVE",
+    status: "COMPLETE",
     desc: "Mint the Mystery Box. Every object remains fully sealed.",
   },
   {
     title: "Chapter II — Capsule Reveal",
-    status: "LOCKED",
+    status: "ACTIVE",
     desc: "Visual shell, rarity, traits, and forge potential become visible.",
   },
   {

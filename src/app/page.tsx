@@ -80,13 +80,22 @@ export default function Home() {
   const totalPrice = useMemo(() => formatEther(totalPriceWei), [totalPriceWei]);
 
   const soldOut = minted >= maxSupply;
-  const REVEAL_TIME = Date.now() + 24 * 60 * 60 * 1000;
-  const [timeLeft, setTimeLeft] = useState(REVEAL_TIME - Date.now());
+
+  const [revealTime] = useState(() => {
+    const stored = typeof window !== "undefined" ? localStorage.getItem("revealTime") : null;
+    if (stored) return parseInt(stored);
+    const t = Date.now() + 12 * 60 * 60 * 1000;
+    if (typeof window !== "undefined") localStorage.setItem("revealTime", String(t));
+    return t;
+  });
+  const [timeLeft, setTimeLeft] = useState(Math.max(0, revealTime - Date.now()));
 
   useEffect(() => {
-    const t = setInterval(() => setTimeLeft(Math.max(0, REVEAL_TIME - Date.now())), 1000);
+    const tick = () => setTimeLeft(Math.max(0, revealTime - Date.now()));
+    tick();
+    const t = setInterval(tick, 1000);
     return () => clearInterval(t);
-  }, []);
+  }, [revealTime]);
 
   const h = Math.floor(timeLeft / 3600000);
   const m = Math.floor((timeLeft % 3600000) / 60000);
@@ -374,7 +383,7 @@ export default function Home() {
                   <div className="text-lg font-semibold text-white">Forge Diagram</div>
                   <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-dim">tier flow // burn // upgrade</div>
                 </div>
-                <div className="rounded-full border border-gold/25 bg-gold/10 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-gold">active in phase II</div>
+                <div className="rounded-full border border-gold/25 bg-gold/10 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-gold">unlocks in Chapter IV</div>
               </div>
               <ForgeDiagram />
             </div>
@@ -392,11 +401,12 @@ export default function Home() {
             </div>
             <div className="mt-8 grid gap-4 lg:grid-cols-5">
               {roadmap.map((item) => {
+                const complete = item.status === "COMPLETE";
                 const active = item.status === "ACTIVE";
                 const sealed = item.status === "SEALED";
                 return (
-                  <div key={item.title} className={`rounded-[24px] p-5 soft-card ${active ? "roadmap-active" : sealed ? "roadmap-sealed" : "roadmap-locked"}`}>
-                    <div className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.2em] text-text-soft">{active ? "● ACTIVE" : sealed ? "◌ SEALED" : "◦ LOCKED"}</div>
+                  <div key={item.title} className={`rounded-[24px] p-5 soft-card ${complete ? "roadmap-active" : active ? "roadmap-active" : sealed ? "roadmap-sealed" : "roadmap-locked"}`}>
+                    <div className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.2em] text-text-soft">{complete ? "✓ COMPLETE" : active ? "● ACTIVE" : sealed ? "◌ SEALED" : "◦ LOCKED"}</div>
                     <h3 className="mt-4 text-lg font-semibold tracking-[-0.03em] text-white">{item.title}</h3>
                     <p className="mt-3 text-sm leading-7 text-text-soft">{item.desc}</p>
                   </div>
