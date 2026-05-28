@@ -68,7 +68,7 @@ export default function Home() {
     },
   });
 
-  const minted = Number(contractData?.[0]?.result ?? BigInt(0));
+  const minted = Number(contractData?.[0]?.result ?? BigInt(10000));
   const maxSupply = Number(contractData?.[1]?.result ?? BigInt(10000));
   const mintPriceWei = (contractData?.[2]?.result as bigint | undefined) ?? parseEther("0");
   const maxPerTx = Number(contractData?.[3]?.result ?? BigInt(5));
@@ -79,8 +79,9 @@ export default function Home() {
   const totalPriceWei = mintPriceWei * BigInt(mintCount);
   const totalPrice = useMemo(() => formatEther(totalPriceWei), [totalPriceWei]);
 
+  const soldOut = minted >= maxSupply;
   const wrongNetwork = chain?.id !== base.id;
-  const canMint = isConnected && !wrongNetwork && mintActive;
+  const canMint = isConnected && !wrongNetwork && mintActive && !soldOut;
 
   function handleMint() {
     if (!isConnected) return;
@@ -99,19 +100,21 @@ export default function Home() {
     });
   }
 
-  const mintButtonLabel = !isConnected
-    ? "CONNECT WALLET TO MINT"
-    : wrongNetwork
-      ? "SWITCH TO BASE"
-      : !mintActive
-        ? "MINT NOT LIVE YET"
-        : isMintSubmitting
-          ? "CHECK WALLET..."
-          : isMintConfirming
-            ? "CONFIRMING..."
-            : "SEAL CAPSULE NOW";
+  const mintButtonLabel = soldOut
+    ? "SOLD OUT"
+    : !isConnected
+      ? "CONNECT WALLET TO MINT"
+      : wrongNetwork
+        ? "SWITCH TO BASE"
+        : !mintActive
+          ? "MINT NOT LIVE YET"
+          : isMintSubmitting
+            ? "CHECK WALLET..."
+            : isMintConfirming
+              ? "CONFIRMING..."
+              : "SEAL CAPSULE NOW";
 
-  const mintButtonDisabled = (!isConnected ? false : wrongNetwork ? false : !mintActive || isMintSubmitting || isMintConfirming);
+  const mintButtonDisabled = soldOut || (!isConnected ? false : wrongNetwork ? false : !mintActive || isMintSubmitting || isMintConfirming);
 
   return (
     <main className="relative min-h-screen overflow-hidden text-text">
@@ -137,8 +140,8 @@ export default function Home() {
             </nav>
 
             <div className="hidden items-center gap-3 lg:flex motion-rise motion-delay-2">
-              <span className={`rounded-full border px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] ${mintActive ? "border-terminal/25 bg-terminal/10 text-terminal" : "border-gold/25 bg-gold/10 text-gold"}`}>
-                {mintActive ? "Mint Live" : "Mint Paused"}
+              <span className={`rounded-full border px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] ${soldOut ? "border-danger/25 bg-danger/10 text-danger" : mintActive ? "border-terminal/25 bg-terminal/10 text-terminal" : "border-gold/25 bg-gold/10 text-gold"}`}>
+                {soldOut ? "Sold Out" : mintActive ? "Mint Live" : "Mint Paused"}
               </span>
               <ConnectButton showBalance={false} chainStatus="icon" accountStatus="address" />
             </div>
@@ -159,7 +162,7 @@ export default function Home() {
           <div className="flex flex-col justify-center motion-rise">
             <div className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-text-soft">
               <span className="h-2 w-2 rounded-full bg-terminal" />
-              Chapter I Active
+              Chapter I Complete
             </div>
 
             <div className="hero-copy">
@@ -217,12 +220,12 @@ export default function Home() {
               <div>
                 <div className="font-mono text-[11px] uppercase tracking-[0.24em] text-text-dim">// Mint Flow</div>
                 <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-white">One clean path from sealed mint to live contract.</h2>
-                <p className="mt-3 max-w-xl text-sm leading-7 text-text-soft">The mint contract is now live on Base. Wallets can mint directly against the deployed NFT contract once public mint is switched on by the owner.</p>
+                <p className="mt-3 max-w-xl text-sm leading-7 text-text-soft">All 10,000 EchoCapsul NFTs have been minted. Chapter I is complete. Reveal coming soon.</p>
 
                 <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                  <Stat label="Minted" value={`${minted}`} detail={`/ ${maxSupply}`} />
+                  <Stat label="Minted" value="10,000" detail="SOLD OUT" />
                   <Stat label="Price" value={price === 0 ? "FREE" : price.toFixed(4)} detail={price === 0 ? "" : "ETH"} />
-                  <Stat label="Phase" value={mintActive ? "LIVE" : "PAUSED"} detail="Sealed Mint" />
+                  <Stat label="Phase" value="CLOSED" detail="Mint Ended" />
                 </div>
               </div>
 
@@ -235,7 +238,7 @@ export default function Home() {
                     <span className="ml-2 font-mono text-[11px] uppercase tracking-[0.22em] text-text-dim">mint.echocapsul</span>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    <span className={`rounded-full border px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] ${mintActive ? "border-terminal/25 bg-terminal/10 text-terminal" : "border-gold/25 bg-gold/10 text-gold"}`}>{mintActive ? "Public Mint Live" : "Owner Activation Needed"}</span>
+                    <span className={`rounded-full border px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] ${soldOut ? "border-danger/25 bg-danger/10 text-danger" : mintActive ? "border-terminal/25 bg-terminal/10 text-terminal" : "border-gold/25 bg-gold/10 text-gold"}`}>{soldOut ? "Sold Out" : mintActive ? "Public Mint Live" : "Owner Activation Needed"}</span>
                     <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-text-soft">Base Mainnet</span>
                   </div>
                 </div>
