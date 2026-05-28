@@ -221,7 +221,7 @@ export default function Home() {
 
                 <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
                   <Stat label="Minted" value={`${minted}`} detail={`/ ${maxSupply}`} />
-                  <Stat label="Price" value={price.toFixed(4)} detail="ETH" />
+                  <Stat label="Price" value={price === 0 ? "FREE" : price.toFixed(4)} detail={price === 0 ? "" : "ETH"} />
                   <Stat label="Phase" value={mintActive ? "LIVE" : "PAUSED"} detail="Sealed Mint" />
                 </div>
               </div>
@@ -276,7 +276,7 @@ export default function Home() {
                 <div className="mt-5 grid gap-3 sm:grid-cols-3">
                   <div className="rounded-2xl border border-white/8 bg-white/3 p-4 sm:col-span-2">
                     <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-dim">estimate cost</div>
-                    <div className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-white">{totalPrice} ETH</div>
+                    <div className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-white">{price === 0 ? "FREE" : `${totalPrice} ETH`}</div>
                   </div>
                   <div className="rounded-2xl border border-white/8 bg-white/3 p-4">
                     <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-dim">wallet minted</div>
