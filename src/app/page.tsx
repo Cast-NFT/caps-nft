@@ -43,7 +43,7 @@ export default function Home() {
       {
         address: ECHO_CAPSUL_CONTRACT_ADDRESS,
         abi: ECHO_CAPSUL_ABI,
-        functionName: "MINT_PRICE",
+        functionName: "mintPrice",
       },
       {
         address: ECHO_CAPSUL_CONTRACT_ADDRESS,
@@ -70,7 +70,7 @@ export default function Home() {
 
   const minted = Number(contractData?.[0]?.result ?? BigInt(0));
   const maxSupply = Number(contractData?.[1]?.result ?? BigInt(10000));
-  const mintPriceWei = (contractData?.[2]?.result as bigint | undefined) ?? parseEther("0.0001");
+  const mintPriceWei = (contractData?.[2]?.result as bigint | undefined) ?? parseEther("0");
   const maxPerTx = Number(contractData?.[3]?.result ?? BigInt(5));
   const mintActive = Boolean(contractData?.[4]?.result ?? false);
   const mintedWalletCount = Number(mintedByWallet ?? BigInt(0));
@@ -382,7 +382,7 @@ export default function Home() {
               <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-dim">Collection</div>
               <div className="mt-3 flex flex-col gap-2 text-sm text-text-soft">
                 <span>Contract: {ECHO_CAPSUL_CONTRACT_ADDRESS}</span>
-                <span>Mint: 0.0001 ETH</span>
+                <span>Mint: Free</span>
                 <span>Network: Base</span>
                 <span>© 2026 EchoCapsul</span>
               </div>

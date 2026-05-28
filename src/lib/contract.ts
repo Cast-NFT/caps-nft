@@ -1,4 +1,4 @@
-export const ECHO_CAPSUL_CONTRACT_ADDRESS = "0x7C53D108F24F69ee8EB43437a9D0E9766355f384" as const;
+export const ECHO_CAPSUL_CONTRACT_ADDRESS = "0x6bAC7AAdf9bE28910B7E4A56C1c561F8aA3b5A58" as const;
 
 export const ECHO_CAPSUL_ABI = [
   {
@@ -31,7 +31,7 @@ export const ECHO_CAPSUL_ABI = [
   },
   {
     inputs: [],
-    name: "MINT_PRICE",
+    name: "mintPrice",
     outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",

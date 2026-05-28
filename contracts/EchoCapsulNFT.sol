@@ -20,7 +20,7 @@ contract EchoCapsulNFT is ERC721A, Ownable, Pausable, ReentrancyGuard {
     error ZeroAddressTreasury();
 
     uint256 public constant MAX_SUPPLY = 10_000;
-    uint256 public constant MINT_PRICE = 0.0001 ether;
+    uint256 public mintPrice;
     uint256 public constant MAX_PER_TX = 5;
     uint256 public constant MAX_PER_WALLET = 10;
 
@@ -39,6 +39,7 @@ contract EchoCapsulNFT is ERC721A, Ownable, Pausable, ReentrancyGuard {
     event BaseURIUpdated(string newBaseURI);
     event PrerevealURIUpdated(string newPrerevealURI);
     event TreasuryUpdated(address indexed newTreasury);
+    event MintPriceUpdated(uint256 newMintPrice);
     event FundsWithdrawn(address indexed treasury, uint256 amount);
 
     constructor(
@@ -58,7 +59,7 @@ contract EchoCapsulNFT is ERC721A, Ownable, Pausable, ReentrancyGuard {
         if (quantity > MAX_PER_TX) revert MaxPerTxExceeded();
         if (totalSupply() + quantity > MAX_SUPPLY) revert SoldOut();
         if (mintedPerWallet[msg.sender] + quantity > MAX_PER_WALLET) revert MaxPerWalletExceeded();
-        if (msg.value != quantity * MINT_PRICE) revert IncorrectPayment();
+        if (msg.value != quantity * mintPrice) revert IncorrectPayment();
 
         mintedPerWallet[msg.sender] += quantity;
         _safeMint(msg.sender, quantity);
@@ -88,6 +89,11 @@ contract EchoCapsulNFT is ERC721A, Ownable, Pausable, ReentrancyGuard {
         if (newTreasury == address(0)) revert ZeroAddressTreasury();
         treasury = newTreasury;
         emit TreasuryUpdated(newTreasury);
+    }
+
+    function setMintPrice(uint256 newMintPrice) external onlyOwner {
+        mintPrice = newMintPrice;
+        emit MintPriceUpdated(newMintPrice);
     }
 
     function pause() external onlyOwner {
