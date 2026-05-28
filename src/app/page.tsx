@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { formatEther, parseEther } from "viem";
 import {
@@ -80,6 +80,18 @@ export default function Home() {
   const totalPrice = useMemo(() => formatEther(totalPriceWei), [totalPriceWei]);
 
   const soldOut = minted >= maxSupply;
+  const REVEAL_TIME = Date.now() + 24 * 60 * 60 * 1000;
+  const [timeLeft, setTimeLeft] = useState(REVEAL_TIME - Date.now());
+
+  useEffect(() => {
+    const t = setInterval(() => setTimeLeft(Math.max(0, REVEAL_TIME - Date.now())), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  const h = Math.floor(timeLeft / 3600000);
+  const m = Math.floor((timeLeft % 3600000) / 60000);
+  const s = Math.floor((timeLeft % 60000) / 1000);
+
   const wrongNetwork = chain?.id !== base.id;
   const canMint = isConnected && !wrongNetwork && mintActive && !soldOut;
 
@@ -316,6 +328,23 @@ export default function Home() {
         </section>
 
         <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8" id="reveal">
+          <div className="glass-panel rounded-[32px] p-6 sm:p-8 mb-12 motion-rise">
+            <div className="text-center">
+              <div className="font-mono text-[11px] uppercase tracking-[0.24em] text-echo">Chapter II — Capsule Reveal</div>
+              <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-white">The shells crack open in</h2>
+              {timeLeft > 0 ? (
+                <div className="mt-6 flex justify-center gap-4 sm:gap-6">
+                  <CountBlock num={String(h).padStart(2,"0")} label="Hours" />
+                  <CountBlock num={String(m).padStart(2,"0")} label="Minutes" />
+                  <CountBlock num={String(s).padStart(2,"0")} label="Seconds" />
+                </div>
+              ) : (
+                <div className="mt-6 text-2xl font-bold text-terminal animate-pulse">REVEAL IS LIVE</div>
+              )}
+              <p className="mt-6 max-w-xl mx-auto text-sm leading-7 text-text-soft">Every sealed Mystery Box transforms into its true Capsule form. Rarity, shell, and forge traits become visible. The Inner Archive remains sealed.</p>
+            </div>
+          </div>
+
           <div className="mb-8 max-w-2xl motion-rise">
             <div className="font-mono text-[11px] uppercase tracking-[0.24em] text-text-dim">// Reveal Spectrum</div>
             <h2 className="mt-3 text-4xl font-semibold tracking-[-0.05em] text-white">The shell opens. The archive stays sealed.</h2>
@@ -416,6 +445,17 @@ function MetricCard({ label, value, note }: { label: string; value: string; note
       <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-text-dim">{label}</div>
       <div className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-white">{value}</div>
       <div className="mt-1 text-sm text-text-soft">{note}</div>
+    </div>
+  );
+}
+
+function CountBlock({ num, label }: { num: string; label: string }) {
+  return (
+    <div className="flex flex-col items-center">
+      <div className="rounded-2xl border border-echo/20 bg-echo/5 px-5 py-4 sm:px-8 sm:py-5">
+        <span className="text-4xl sm:text-5xl font-bold tracking-[-0.06em] text-white tabular-nums">{num}</span>
+      </div>
+      <span className="mt-2 font-mono text-[11px] uppercase tracking-[0.22em] text-text-dim">{label}</span>
     </div>
   );
 }
